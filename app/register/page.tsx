@@ -1,25 +1,34 @@
 import Link from "next/link";
+import RegisterImage from "@/assets/loginPageImage.jpg"
+import Image from 'next/image'
+
+
 
 export default function Register() {
     return (
         <div className="bg-gray-100 flex justify-center items-center h-screen">
             <div className="w-1/2 h-screen hidden lg:block">
-                <img src="https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat" alt="Placeholder Image" className="object-cover w-full h-full" />
+                <Image
+                    src={RegisterImage}
+                    alt="Picture of the author"
+                    className="object-cover w-full h-full"
+                >
+                </Image>
             </div>
             <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-                <h1 className="text-2xl font-semibold mb-4">ยินดีต้อนรับสู่ Short Note</h1>
-                <h1 className="text-2xl font-semibold mb-4">สมัครสมาชิก</h1>
+                <h1 className="text-2xl font-semibold mb-2">ยินดีต้อนรับสู่ Short Note</h1>
+                <h1 className="text-2xl font-semibold mb-2">สมัครสมาชิก</h1>
                 <form action="#" method="POST">
-                    <div className="mb-4">
+                    <div className="mb-2">
                         <label htmlFor="Email" className="block text-gray-600">อีเมล</label>
                         <input type="text" id="username" name="username" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" placeholder="อีเมล" />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-2">
                         <label htmlFor="password" className="block text-gray-600">รหัสผ่าน</label>
                         <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" placeholder="รหัสผ่าน" />
                         <h3 className="text-gray-400">รหัสผ่านควรมีความยาว 8 - 12 อักขระ ประกอบไปด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลขและอักขระพิเศษ</h3>
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-2">
                         <label htmlFor="password" className="block text-gray-600">ยืนยันรหัสผ่าน</label>
                         <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" placeholder="ยืนยันรหัสผ่าน" />
                     </div>

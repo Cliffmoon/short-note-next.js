@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/navigation";
-
+import { AuthProvider } from "@/app/context/AuthProvider"
+import { Suspense } from "react";
+import { NavigationEvents } from "./components/navigation-event/navigation-event";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,9 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navigation />
-        {children}
+        <AuthProvider>
+          <Navigation />
+          {children}
+
+        </AuthProvider>
       </body>
-    </html>
+    </html >
   );
 }
