@@ -1,6 +1,7 @@
 'use client'
-import { fetchBlogsID, publicAPI } from "@/app/API/page";
+import { fetchBlogByID, publicAPI } from "@/app/API/page";
 import axios from "axios"
+import Link from "next/link";
 import React, { use, useEffect, useState } from "react"
 
 interface Imagedata {
@@ -50,16 +51,15 @@ export default function FormEdit({ id }: any) {
     const [blogDatabyID, setBlogDataById] = useState({})
     const [isLoading, setIsloading] = useState(true)
 
+    async function fetchBlogDatabyId() {
+        const res = await fetch(`${publicAPI}/api/blogs/${id}?populate[0]=imagedata.image`)
+        const data = await res.json()
+        setBlogDataById(data)
+        setFormEdit(data.data.attributes)
+        setIsloading(false)
+    }
     useEffect(() => {
-        async function fetchBlogDatabyId() {
-            const res = await fetch(`${publicAPI}/api/blogs/${id}?populate[0]=imagedata.image`)
-            const data = await res.json()
-            setBlogDataById(data)
-            setFormEdit(data.data.attributes)
-            setIsloading(false)
-        }
         fetchBlogDatabyId()
-
     }, [])
 
     if (isLoading) {
@@ -83,21 +83,49 @@ export default function FormEdit({ id }: any) {
     const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         try {
-            const res = await axios.put(`${publicAPI}/api/blogs/${id}?populate[0]=imagedata.image`, {
-                data: formEdit,
+
+            let newFormEdit = JSON.parse(JSON.stringify(formEdit))
+            console.log('newformedit uuuuu', newFormEdit, formEdit)
+            newFormEdit.imagedata.forEach((element, index) => {
+                newFormEdit.imagedata[index].image = formEdit.imagedata[index].image.data.attributes.id
+            });
+
+            console.log('newformedit xxx', newFormEdit, formEdit)
+            const res = await axios.put(`${publicAPI}/api/blogs/${id}`, {
+                data: newFormEdit,
+                // แก้ formedit
             })
             console.log(res)
+
+            await fetchBlogDatabyId()
         }
         catch (error) {
             console.log('error', error)
         }
     }
 
-    const removeImage = (index: number) => {
-        const newImages = [...formEdit.imagedata];
-        newImages.splice(index, 1);
-        setFormEdit({ ...formEdit, imagedata: newImages });
-    };
+    const removeImage = async (idImg: number) => {
+        alert(idImg)
+        try {
+            let newFormEdit = JSON.parse(JSON.stringify(formEdit))
+            newFormEdit.imagedata.forEach((element, index) => {
+                newFormEdit.imagedata[index].image = formEdit.imagedata[index].image.data.attributes.id
+            })
+            const superNewFormEdit = newFormEdit.imagedata.filter((image) => {
+                return image.id != idImg
+            })
+
+            console.log('seasda', superNewFormEdit, newFormEdit)
+            const res = await axios.put(`${publicAPI}/api/blogs/${id}`, {
+                data: superNewFormEdit
+            })
+            console.log(res)
+            await fetchBlogDatabyId()
+        }
+        catch (error) {
+            console.log('error', error)
+        }
+    }
 
     const handleChangeCaption = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
 
@@ -122,7 +150,11 @@ export default function FormEdit({ id }: any) {
 
         newimagedata.push(
             {
-                "image": data[0],
+                "image": {
+                    "data": {
+                        "attributes": data[0]
+                    }
+                },
                 "caption": [
                     {
                         "type": "paragraph",
@@ -143,16 +175,16 @@ export default function FormEdit({ id }: any) {
 
         setFormEdit(newformWrite)
 
-        console.log('formWrite', newformWrite)
+        console.log('Xtersdsxxx', newformWrite)
+
 
     }
     const images =
         formEdit.imagedata?.map((x, index) => x.image?.data?.attributes.url &&
-            <div key={index} className="my-2">
-                {index}
+            <div key={index} className="my-2 ">
                 <img
                     src={publicAPI + x.image?.data.attributes.url}
-                    className="my-2"
+                    className="my-2 "
                 />
                 <div>
                     <input
@@ -167,7 +199,7 @@ export default function FormEdit({ id }: any) {
                 </div>
                 <button
                     className="bg-red-500 text-white my-2"
-                    onClick={() => removeImage(index)} >
+                    onClick={() => removeImage(formEdit.imagedata[index].id)} >
                     Remove
                 </button>
             </div>
@@ -175,6 +207,8 @@ export default function FormEdit({ id }: any) {
 
     return (
         <div className="container mx-auto px-4">
+            <Link href={`/blog/${id}`}>{'< back'}</Link>
+            <br />
             เขียนสรุป
             <form onSubmit={handleSubmit} className="grid w-1/2 mx-2 mb-12 gap-4">
                 <div className="mb-2">

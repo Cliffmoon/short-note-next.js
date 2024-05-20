@@ -1,14 +1,14 @@
-import { fetchBlogs, fetchBlogsID, publicAPI } from '@/app/API/page'
+import { fetchBlogByID, publicAPI } from '@/app/API/page'
+import ButtonDelete from '@/app/components/buttonDelete/buttonDelete'
 import Link from 'next/link'
 
 export default async function Blog({ params }: any) {
     const blogID = await params.id
-    const blogDataByID = await fetchBlogsID(blogID)
+    const blogDataByID = await fetchBlogByID(blogID)
     // console.log('typeof param id ', typeof (blogID))
     // console.log('url', publicAPI + blogDataByID.data.id)
     // console.log('param id ', blogID)
     // console.log('blog data by id', blogDataByID)
-
     const images =
         blogDataByID.data.attributes.imagedata.map((x) =>
             <div key={x.id}>
@@ -132,6 +132,7 @@ export default async function Blog({ params }: any) {
                 </button>
             </Link>
 
+            <ButtonDelete params={params} />
             <div className='image-containner'>
                 <div>
                     {images}

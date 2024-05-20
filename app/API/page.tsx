@@ -14,7 +14,7 @@ export const fetchBlogs = async () => {
     }
 }
 
-export const fetchBlogsID = async (id: string) => {
+export const fetchBlogByID = async (id: string) => {
     console.log('fetch id', id)
     const option = {
         headers: {

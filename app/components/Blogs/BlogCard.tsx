@@ -15,7 +15,7 @@ export default function BlogCard({ blog }: any) {
     ///นำรูปแรกใน api มาแสดง
     const firstimageUrl = publicAPI + blog.attributes.imagedata[0].image.data.attributes.url
 
-
+    console.log('blog', blog)
     return (
         <div className='rounded-lg shadow-md p-4 mb-2 overflow-hidden border border-gray-600 cursor-pointer'>
             <Link href={`/blog/${blog.id}`}>
