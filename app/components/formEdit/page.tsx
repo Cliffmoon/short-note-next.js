@@ -104,20 +104,17 @@ export default function FormEdit({ id }: any) {
         }
     }
 
-    const removeImage = async (idImg: number) => {
-        alert(idImg)
+    const removeImage = async (index: number) => {
+        alert(index)
         try {
             let newFormEdit = JSON.parse(JSON.stringify(formEdit))
             newFormEdit.imagedata.forEach((element, index) => {
                 newFormEdit.imagedata[index].image = formEdit.imagedata[index].image.data.attributes.id
             })
-            const superNewFormEdit = newFormEdit.imagedata.filter((image) => {
-                return image.id != idImg
-            })
-
-            console.log('seasda', superNewFormEdit, newFormEdit)
+            newFormEdit.imagedata.splice(index, 1)
+            console.log('seasda', newFormEdit)
             const res = await axios.put(`${publicAPI}/api/blogs/${id}`, {
-                data: superNewFormEdit
+                data: newFormEdit
             })
             console.log(res)
             await fetchBlogDatabyId()
@@ -199,7 +196,7 @@ export default function FormEdit({ id }: any) {
                 </div>
                 <button
                     className="bg-red-500 text-white my-2"
-                    onClick={() => removeImage(formEdit.imagedata[index].id)} >
+                    onClick={() => removeImage(index)} >
                     Remove
                 </button>
             </div>
